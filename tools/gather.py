@@ -52,11 +52,3 @@ def gath_data(my_dir,table_obj,column_names,column_types=None,column_num=-1,star
                             datas[k] = int(datas[k])
 
             table_obj(**datas)
-
-if __name__ == '__main__':
-    column_names = ('seq', 'checkResult', 'city', 'xian', 'zhen','cun',
-        'name','idcode', 'sex','health', 'sch','grade','sclass',
-        'statu','hoster','hosterTel','sq','sr',
-        'ss','st','su','sv','sw','sx','memo')
-
-    gath_data('result',Stud,column_names) # 末尾行无多余数据
