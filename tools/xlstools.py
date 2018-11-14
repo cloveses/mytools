@@ -20,21 +20,20 @@ def dump(table_obj,column_titles,all_keys,according_key=None):
     according_key 分类依据字段名(默认为None时全部数据导出在results.xlsx文件中)
     """
     if according_key:
-        according_keys = select(getattr(e,according_key) for e in table_obj)
-        for according_key in according_keys:
+        according_values = select(getattr(e,according_key) for e in table_obj)
+        for according_value in according_values:
             datas = [column_titles,]
-            table_objects = select(s for s in table_obj 
-                if getattr(e,according_key) == according_key)
+            table_objects = select(s for s in table_obj).filter(lambda e:getattr(e,according_key) == according_value)
             for table_object in table_objects:
                 row = []
                 for key in all_keys:
                     row.append(getattr(table_object,key))
                 datas.append(row)
             if datas:
-                save_datas_xlsx(according_keys+'.xlsx',datas)
+                save_datas_xlsx(according_value+'.xlsx',datas)
     else:
         datas = [column_titles,]
-        table_objects = select(s for s in table_obj 
+        table_objects = select(s for s in table_obj
             if getattr(e,according_key) == according_key)
         for table_object in table_objects:
             row = []
