@@ -1,6 +1,6 @@
 import os
 import xlrd
-from models import *
+from pony.orm import *
 
 
 def get_files(directory):

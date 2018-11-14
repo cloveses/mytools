@@ -1,4 +1,4 @@
-
+from pony.orm import *
 
 def save_datas_xlsx(filename,datas):
     #将一张表的信息写入电子表格中XLSX文件格式
@@ -10,7 +10,8 @@ def save_datas_xlsx(filename,datas):
             w_sheet.write(rowi,coli,celld)
     w.close()
 
-def dump_group(table_obj,column_titles,all_keys,according_key＝None):
+@db_session
+def dump(table_obj,column_titles,all_keys,according_key=None):
     """
     导出数据数据到xlsx文件
     table_obj ORM对象
@@ -19,7 +20,7 @@ def dump_group(table_obj,column_titles,all_keys,according_key＝None):
     according_key 分类依据字段名(默认为None时全部数据导出在results.xlsx文件中)
     """
     if according_key:
-        according_keys = select(getatttr(e,according_key) for e in table_obj)
+        according_keys = select(getattr(e,according_key) for e in table_obj)
         for according_key in according_keys:
             datas = [column_titles,]
             table_objects = select(s for s in table_obj 
