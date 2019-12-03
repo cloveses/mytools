@@ -5,6 +5,22 @@ import re
 import os
 import random
 
+# 体质健康测试数据处理
+'''
+身高80－250
+体重14－200
+肺活量500－9999
+50米跑：5.0－20.0
+立定跳远：50－400
+坐位体前屈－30－40
+仰卧起坐0－99
+引体向上0－99
+视力3.5－5.3 低3.0 为0
+串镜：视力大于5.0，为0， 低于5.0 “-1”代表正片下降、负片上升。其他情况请录入“2”。如条件不允许，未测试者录入“9”
+左/右眼屈光不正：以“0”代表正常，以“1”代表近视，以“2”代表远视，以“3”代表其他（疾病等其他原因），如条
+件不允许，未测试者录入“9”
+'''
+
 def get_file_datas(filename,row_deal_function=None,grid_end=0,start_row=1):
     """start_row＝1 有一行标题行；gred_end=1 末尾行不导入"""
     """row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 """
@@ -26,8 +42,53 @@ def get_file_datas(filename,row_deal_function=None,grid_end=0,start_row=1):
             datas.append(row)
     return datas
 
-def row_data_clean(row):
-    return [str(r) for r in row]
+# clear integer
+def clear_int(data, minimize, maxmize, info=''):
+    if data.endswith('.0'):
+        data = data[:-2]
+    if data:
+        data = ''.join(re.split(r'\s+', data.strip()))
+    else:
+        return random.randint(minimize, maxmize)
+    try:
+        data = int(data)
+    except:
+        print(info)
+        return random.randint(minimize, maxmize)
+    else:
+        return data
+
+# clear_float
+def clear_float(data, minimize, maxmize, info=''):
+    data = ''.join(re.split(r'\s+', data))
+    try:
+        data = float(data)
+    except:
+        return data
+    else:
+        return random.random() * (maxmize - minimize) + minimize
+
+def clear_duration(data, minute_minimize, minute_maxmize, info=''):
+    data = re.split(r'\D', data.strip())
+    data = [d for d in data if d]
+    if len(data) > 2:
+        data = data[:2]
+    elif len(data) == 1:
+        data.append('00')
+    elif len(data) < 1:
+        data = ['00', '00']
+    if int(data[-1]) < 10:
+        data[-1] = '0' + data[-1]
+    if int(data[0]) < minute_minimize:
+        data[0] = str(random.randint(minute_minimize, minute_maxmize))
+    if int(data[0]) > minute_maxmize:
+        data[0] = str(minute_maxmize)
+    if int(data[-1]) >= 60:
+        data[-1] = 59
+    return "'".join(data)
+
+
+# 以下对体测和视力数据清理需要应用以上三个方法进行重构
 
 def clean_phdata(row):
     row = [str(r).strip() for r in row]
