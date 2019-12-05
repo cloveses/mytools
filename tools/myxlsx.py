@@ -17,6 +17,28 @@ def get_rows_data(filename):
     #    print(datas)
     return datas
 
+def get_all_sheets_data(filename,row_deal_function=None,grid_end=0,start_row=1):
+    """start_row＝1 有一行标题行；gred_end=1 末尾行不导入"""
+    """row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 """
+    # names = data.sheet_names()
+    # table = data.sheet_by_name(sheet_name)
+
+    wb = xlrd.open_workbook(filename)
+    # ws = wb.sheets()[0]
+    names = wb.sheet_names()
+    nsheets = wb.nsheets
+    datas = []
+    for sheet_index in range(nsheets):
+        ws = wb.sheet_by_index(sheet_index)
+        nrows = ws.nrows
+        for i in range(start_row,nrows-grid_end):
+            row = ws.row_values(i)
+            # print(row)
+            if row_deal_function:
+                row = row_deal_function(row)
+            datas.append(row)
+    return datas
+
 def get_cols_data(filename,headline_row_num=0):
     # 按列获取数据
     datas = []
