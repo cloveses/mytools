@@ -17,8 +17,8 @@ def get_rows_data(filename):
     #    print(datas)
     return datas
 
-def get_all_sheets_data(filename,row_deal_function=None,grid_end=0,start_row=1):
-    """start_row＝1 有一行标题行；gred_end=1 末尾行不导入"""
+def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0):
+    """start_rows＝1 有一行标题行；gred_end=1 末尾行不导入"""
     """row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 """
     # names = data.sheet_names()
     # table = data.sheet_by_name(sheet_name)
@@ -31,7 +31,7 @@ def get_all_sheets_data(filename,row_deal_function=None,grid_end=0,start_row=1):
     for sheet_index in range(nsheets):
         ws = wb.sheet_by_index(sheet_index)
         nrows = ws.nrows
-        for i in range(start_row,nrows-grid_end):
+        for i in range(start_rows,nrows-tail_rows):
             row = ws.row_values(i)
             # print(row)
             if row_deal_function:
@@ -97,24 +97,21 @@ def summary_col(filename,col_seq_num,res_filename='sum.xlsx'):
     res = [[k,v] for k,v in res.items()]
     save_datas_xlsx(res_filename,res)
 
-def merge_files_data(mydir,res_filename,headline_rows=0):
+def merge_files_data(mydir,res_filename,headline_rows=0, tail_rows=0):
     # 合并指定目录(mydir)下的分表数据到一个电子表格文件(res_filename)中的一张表中
     if not os.path.exists(mydir):
         print('Directory is not exist.')
         return
     filenames = get_files(mydir)
     datass = []
-    for filename in filenames:
-        datas = get_data(filename)
+    for index, filename in enumerate(filenames):
+        if index == 0:
+            datas = get_all_sheets_data(filename, tail_rows=tail_rows)
+        else:
+            datas = get_all_sheets_data(filename, tail_rows=tail_rows, start_rows=start_rows)
         datass.extend(datas)
-    if datass:
-        if len(datass) > 1 and headline_rows > 0:
-            tails = datass[1:]
-            datass = datass[:1]
-            if headline_rows > 0:
-                no_headline = [data[headline_rows:] for data in tails]
-            datass.extend(tails)
-        save_datas_xlsx(res_filename,datass)
+
+    save_datas_xlsx(res_filename,datass)
 
 if __name__ == '__main__':
     pass
