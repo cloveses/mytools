@@ -17,9 +17,11 @@ def get_rows_data(filename):
     #    print(datas)
     return datas
 
-def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0):
-    """start_rows＝1 有一行标题行；gred_end=1 末尾行不导入"""
-    """row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 """
+def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0, retain_headline=False):
+    """ start_rows＝1 有一行标题行；gred_end=1 末尾行不导入
+        row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 
+        retain_headline 保留首个sheet的标题行标志"""
+
     # names = data.sheet_names()
     # table = data.sheet_by_name(sheet_name)
 
@@ -28,10 +30,14 @@ def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0
     names = wb.sheet_names()
     nsheets = wb.nsheets
     datas = []
-    for sheet_index in range(nsheets):
+    for index, sheet_index in enumerate(range(nsheets)):
         ws = wb.sheet_by_index(sheet_index)
         nrows = ws.nrows
-        for i in range(start_rows,nrows-tail_rows):
+        if index == 0:
+            start = 0
+        else:
+            start = start_rows
+        for i in range(start,nrows-tail_rows):
             row = ws.row_values(i)
             # print(row)
             if row_deal_function:
@@ -106,7 +112,7 @@ def merge_files_data(mydir,res_filename,headline_rows=0, tail_rows=0):
     datass = []
     for index, filename in enumerate(filenames):
         if index == 0:
-            datas = get_all_sheets_data(filename, tail_rows=tail_rows)
+            datas = get_all_sheets_data(filename, tail_rows=tail_rows, start_rows=headline_rows, retain_headline=True)
         else:
             datas = get_all_sheets_data(filename, tail_rows=tail_rows, start_rows=headline_rows)
         datass.extend(datas)
