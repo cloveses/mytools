@@ -33,13 +33,12 @@ def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0
     for index, sheet_index in enumerate(range(nsheets)):
         ws = wb.sheet_by_index(sheet_index)
         nrows = ws.nrows
-        if index == 0:
+        if retain_headline and index == 0:
             start = 0
         else:
             start = start_rows
         for i in range(start,nrows-tail_rows):
             row = ws.row_values(i)
-            # print(row)
             if row_deal_function:
                 row = row_deal_function(row)
             datas.append(row)
@@ -120,4 +119,4 @@ def merge_files_data(mydir,res_filename,headline_rows=0, tail_rows=0):
     save_datas_xlsx(res_filename,datass)
 
 if __name__ == '__main__':
-    pass
+    merge_files_data('.\\data','res.xlsx',headline_rows=1)
