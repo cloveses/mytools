@@ -108,7 +108,7 @@ def merge_files_data(mydir,res_filename,headline_rows=0, tail_rows=0):
         if index == 0:
             datas = get_all_sheets_data(filename, tail_rows=tail_rows)
         else:
-            datas = get_all_sheets_data(filename, tail_rows=tail_rows, start_rows=start_rows)
+            datas = get_all_sheets_data(filename, tail_rows=tail_rows, start_rows=headline_rows)
         datass.extend(datas)
 
     save_datas_xlsx(res_filename,datass)
