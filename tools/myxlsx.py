@@ -17,6 +17,15 @@ def get_rows_data(filename):
     #    print(datas)
     return datas
 
+# 获取所有被合并单元格列表
+# 列表中每一项为一个元组，其结构信息如下：
+# (合并的首行索引，合并的尾行索引+1，合并的首列索引，合并的尾列索引+1 )
+def get_merged_cells(filename):
+    wb = xlrd.open_workbook(filename, formatting_info=True)
+    ws = wb.sheet_by_index(0)
+    return ws.merged_cells[:]
+
+
 def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0, retain_headline=False):
     """ start_rows＝1 有一行标题行；gred_end=1 末尾行不导入
         row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 
