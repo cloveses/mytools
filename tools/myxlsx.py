@@ -25,6 +25,18 @@ def get_merged_cells(filename):
     ws = wb.sheet_by_index(0)
     return ws.merged_cells[:]
 
+def get_file_datas(filename,row_deal_function=None,grid_end=0,start_row=1):
+    """start_row＝1 有一行标题行；gred_end=1 末尾行不导入"""
+    """row_del_function 为每行的数据类型处理函数，不传则对数据类型不作处理 """
+    wb = xlrd.open_workbook(filename)
+    ws = wb.sheets()[0]
+    nrows = ws.nrows
+    datas = []
+    for i in range(start_row,nrows-grid_end):
+        row = ws.row_values(i)
+        # print(row)
+        datas.append(row)
+    return datas
 
 def get_all_sheets_data(filename,row_deal_function=None,tail_rows=0,start_rows=0, retain_headline=False):
     """ start_rows＝1 有一行标题行；gred_end=1 末尾行不导入
