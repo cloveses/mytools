@@ -35,6 +35,8 @@ def get_file_datas(filename,row_deal_function=None,grid_end=0,start_row=1):
     for i in range(start_row,nrows-grid_end):
         row = ws.row_values(i)
         # print(row)
+        if row_deal_function:
+            row = row_deal_function(row)
         datas.append(row)
     return datas
 
