@@ -7,6 +7,7 @@ import xlsxwriter
 将要查找到的整行添加到依据文件的数据行中
 '''
 
+# 对应不同的项目应修改此函数
 def deal_row(row):
     if not isinstance(row[6], str):
         print(row, 'error')
