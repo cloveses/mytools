@@ -48,8 +48,8 @@ def main():
         for data in datas:
             dd = data[:]
             print(data[0])
-            br.switch_to_frame('right')
-            br.switch_to_frame('UpperHalf')
+            br.switch_to.frame('right')
+            br.switch_to.frame('UpperHalf')
 
             id_html = br.find_element_by_xpath('//input[@id="ctl00_ContentPlaceHolder_CheckBox4"]')
             id_html.click()
@@ -66,9 +66,9 @@ def main():
             # 等待结果
             time.sleep(30)
             br.implicitly_wait(5)
-            br.switch_to_default_content()
-            br.switch_to_frame('right')
-            br.switch_to_frame('UpperHalf')
+            br.switch_to.default_content()
+            br.switch_to.frame('right')
+            br.switch_to.frame('UpperHalf')
 
             result_html = br.find_element_by_xpath('//table[@id="ctl00_ContentPlaceHolder_GridView_StuList"]')
             result_texts = result_html.text.split()
@@ -95,7 +95,7 @@ def main():
             # 返回
             br.find_element_by_xpath('//input[@id="Button_Back"]').click()
             br.implicitly_wait(8)
-            br.switch_to_default_content()
+            br.switch_to.default_content()
 
     except Exception as e:
         print(e)
