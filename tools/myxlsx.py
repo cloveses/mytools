@@ -107,7 +107,7 @@ def save_data_sheets_xlsx(filename,datass,sheetnames):
     #将对应表中的信息列表写入对应的work_sheet中
     #例：datass=[sheet1表的信息列表，sheet2表的信息列表],sheetnames=['sheet1','sheet2']
     w = xlsxwriter.Workbook(filename)
-    sheets = [w.add_sheet(sheetname) for sheetname in sheetnames]
+    sheets = [w.add_worksheet(sheetname) for sheetname in sheetnames]
     for ws,datas in zip(sheets,datass):
         for rowi,row in enumerate(datas):
             for coli,celld in enumerate(row):
